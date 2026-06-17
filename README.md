@@ -1,20 +1,15 @@
-# GAIDE
+# GAIDE: Graph-based Attention Masking for Spatial- and Embodiment-aware Motion Planning
 
-**[Website](TODO) | [arXiv](https://arxiv.org/abs/2603.04463) | [PDF](https://arxiv.org/pdf/2603.04463)**
+**Authors**: Davood Soleymanzadeh, Xiao Liang, Minghui Zheng  
+**Paper**: [arXiv:2603.04463](https://arxiv.org/abs/2603.04463)  
+**Venue**: IROS 2026
 
-**IROS 2026** — Official code release for *GAIDE: Graph-based Attention Masking for Spatial- and Embodiment-aware Motion Planning*.
+This is the official code release for GAIDE, a learning-based motion planner for robotic manipulation. GAIDE uses a kinematic-chain graph to build an adjacency mask over a transformer encoder, allowing the model to respect the robot's embodiment structure while attending to surrounding scene geometry. At inference, test-time optimization runs multiple parallel trajectory rollouts and selects the best collision-free solution.
 
-GAIDE is a learning-based motion planner for robot arms that encodes both the robot's kinematic structure and the scene geometry using graph-based attention masking. A kinematic-chain adjacency matrix determines which joints can attend to each other, enabling the transformer encoder to respect the robot's embodiment while reasoning about surrounding obstacles.
-
-Three variants are provided:
-
-| Variant | Description |
-|---|---|
-| **GAIDE** | Proposed method — alternates between masked and unmasked attention layers |
-| **GAIDE-H** | Ablation — graph adjacency mask applied at every layer |
-| **GAIDE-V** | Ablation — standard full-attention transformer (no masking) |
-
----
+We provide three variants:
+- **GAIDE** (proposed): alternates between graph-masked and unmasked attention layers
+- **GAIDE-H**: applies the graph mask at every layer (ablation)
+- **GAIDE-V**: standard full-attention transformer with no masking (ablation)
 
 ## Installation
 
@@ -24,26 +19,22 @@ cd GAIDE
 pip install -e .
 ```
 
-Dependencies: `torch`, `hydra-core`, `wandb`, `curobo`, `open3d`, `trimesh`, `numba`, `scipy`.
-
----
+Install [cuRobo](https://curobo.org) separately following the official instructions — it is used for forward kinematics and collision checking during evaluation.
 
 ## Training
 
 ```bash
-# GAIDE (proposed)
+# Train GAIDE (proposed method)
 python scripts/train.py --config-name gaide dataset_path=/path/to/planning_data.pth
 
-# GAIDE-H (ablation)
+# Train GAIDE-H
 python scripts/train.py --config-name gaide_h dataset_path=/path/to/planning_data.pth
 
-# GAIDE-V (ablation)
+# Train GAIDE-V
 python scripts/train.py --config-name gaide_v dataset_path=/path/to/planning_data.pth
 ```
 
-Checkpoints and logs are saved under `outputs/train/`.
-
----
+Checkpoints are saved under `outputs/train/`. Training config files are at `gaide/config/train/`.
 
 ## Evaluation
 
@@ -58,28 +49,18 @@ python scripts/eval.py \
     env_dir=/path/to/env
 ```
 
-Replace `<scene>` with one of:
-
-| Scene | Config path |
-|---|---|
-| TabletTop | `gaide/config/eval/tabletop` |
-| Box | `gaide/config/eval/box` |
-| Bins | `gaide/config/eval/bins` |
-| Shelf Task I | `gaide/config/eval/shelf_task_i` |
-| Shelf Task II | `gaide/config/eval/shelf_task_ii` |
-| Shelf Task III | `gaide/config/eval/shelf_task_iii` |
-
-Results are written to `outputs/eval/<scene>/`.
-
----
+Available scenes: `tabletop`, `box`, `bins`, `shelf_task_i`, `shelf_task_ii`, `shelf_task_iii`.  
+Results are saved under `outputs/eval/<scene>/`.
 
 ## Citation
 
+If you find this work useful, please cite:
+
 ```bibtex
-@inproceedings{soleymanzadeh2026gaide,
-  title     = {GAIDE: Graph-based Attention Masking for Spatial- and Embodiment-aware Motion Planning},
-  author    = {Soleymanzadeh, Davood and Liang, Xiao and Zheng, Minghui},
-  booktitle = {2026 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
-  year      = {2026}
+@article{soleymanzadeh2026gaide,
+  title   = {GAIDE: Graph-based Attention Masking for Spatial- and Embodiment-aware Motion Planning},
+  author  = {Soleymanzadeh, Davood and Liang, Xiao and Zheng, Minghui},
+  journal = {arXiv preprint arXiv:2603.04463},
+  year    = {2026}
 }
 ```
