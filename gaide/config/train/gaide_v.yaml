@@ -1,0 +1,18 @@
+defaults:
+  - gaide       # inherit all GAIDE defaults
+  - _self_
+
+name: gaide_v   # GAIDE-V: no masking, standard full-attention (ablation)
+
+policy:
+  _target_: gaide.policy.gaide_policy.GAIDEPolicy
+  network:
+    _target_: gaide.model.gaide.gaide_v.GAIDEV
+    hidden_dim: ${hidden_dim}
+    heads: 8
+    feedforward_dim: 1024
+    num_layers: 6
+    dof: 6
+    chunk: 1
+  dof: 6
+  device: ${device}

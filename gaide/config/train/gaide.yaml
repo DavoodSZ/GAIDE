@@ -1,0 +1,77 @@
+defaults:
+  - _self_
+
+hydra:
+  run:
+    dir: ${logdir}
+
+_target_: gaide.agent.train.train_gaide_agent.TrainGAIDEAgent
+
+name: gaide
+logdir: outputs/train/${name}/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
+dataset_path: ???     # path to directory containing planning_data.pth
+
+seed: 42
+device: cuda:0
+data_split_ratio: 0.9
+
+num_scene_pcd_points: 2048
+num_robot_pcd_points: 256
+hidden_dim: 128
+
+wandb: null
+# wandb:
+#   entity: your-entity
+#   project: gaide-train
+#   run: ${now:%H-%M-%S}_${name}
+
+policy:
+  _target_: gaide.policy.gaide_policy.GAIDEPolicy
+  network:
+    _target_: gaide.model.gaide.gaide.GAIDE
+    hidden_dim: ${hidden_dim}
+    heads: 8
+    feedforward_dim: 1024
+    num_layers: 6
+    dof: 6
+    chunk: 1
+  dof: 6
+  device: ${device}
+
+dataset:
+  _target_: gaide.dataset.planning_dataset.PlanningDataset
+  path: ${dataset_path}
+
+dataloader:
+  batch_size: 256
+  num_workers: 8
+  shuffle: true
+  pin_memory: true
+  persistent_workers: true
+
+val_dataloader:
+  batch_size: 256
+  num_workers: 8
+  shuffle: false
+  pin_memory: true
+  persistent_workers: true
+
+train:
+  gradient_steps: 200000
+  val_freq: 10000
+  save_model_freq: 10000
+  log_freq: 1000
+  tqdm_interval_sec: 1.0
+
+optimizer:
+  lr: 1.0e-3
+  betas: [0.9, 0.95]
+  weight_decay: 1.0e-6
+
+checkpoint:
+  topk:
+    monitor_key: train_loss
+    mode: min
+    k: 1
+    format_str: "step={epoch:06d}-train_loss={train_loss:.3f}.ckpt"
+  save_last_ckpt: true

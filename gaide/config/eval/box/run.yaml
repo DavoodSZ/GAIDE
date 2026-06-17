@@ -1,0 +1,60 @@
+defaults:
+  - _self_
+
+hydra:
+  run:
+    dir: ${save_dir}
+
+_target_: gaide.agent.eval.eval_gaide_agent.EvalGAIDEAgent
+
+seed: 42
+device: cuda:0
+
+model_path: ???
+normalization_info_path: ???
+num_robot_pcd_points: 256
+
+problem_dir: ???
+ws_dir: ???
+env_dir: ???
+save_dir: outputs/eval/box
+
+max_rollout_len: 100
+dist_tol: 0.05
+ang_tol: 15.0
+sanity_check: false
+
+planning_difficulties:
+  - free2free
+  - free2tight
+  - tight2free
+  - tight2tight
+optim_sample_trajectories: [1, 100]
+
+policy:
+  _target_: gaide.policy.gaide_policy.GAIDEPolicy
+  network:
+    _target_: gaide.model.gaide.gaide.GAIDE
+    hidden_dim: 128
+    heads: 8
+    feedforward_dim: 1024
+    num_layers: 6
+    dof: 6
+    chunk: 1
+  dof: 6
+  device: ${device}
+
+planner:
+  _target_: gaide.eval_task.box_task.BoxTask
+  device: ${device}
+  num_robot_points: ${num_robot_pcd_points}
+  problem_dir: ${problem_dir}
+  ws_dir: ${ws_dir}
+  env_dir: ${env_dir}
+  save_dir: ${save_dir}
+  normalization_info_path: ${normalization_info_path}
+  model_path: ${model_path}
+  max_rollout_len: ${max_rollout_len}
+  dist_tol: ${dist_tol}
+  ang_tol: ${ang_tol}
+  sanity_check: ${sanity_check}

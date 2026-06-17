@@ -1,0 +1,6 @@
+robot:
+  name: ur5e
+  dof: 6
+  joint_limit: 6.283185  # 2π
+  num_pcd_points: 256     # points sampled on robot surface during training
+  urdf: assets/robots/ur5e/ur5e.urdf
