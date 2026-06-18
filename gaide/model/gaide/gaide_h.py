@@ -30,8 +30,8 @@ class GAIDEH(nn.Module):
         self.nets["joint_embed"] = ConfigEmbedding(dof=dof, hidden_dim=hidden_dim)
         self.nets["goal_embed"] = ConfigEmbedding(dof=dof, hidden_dim=hidden_dim)
 
-        self.nets["robot_pcd"] = RobotPCD()
-        self.nets["scene_pcd"] = ScenePCD()
+        self.nets["robot_pcd"] = RobotPCD(hidden_dim=hidden_dim)
+        self.nets["scene_pcd"] = ScenePCD(hidden_dim=hidden_dim)
 
         self.nets["trans_encoder"] = GraphTransformerEncoder(
             hidden_dim=hidden_dim,

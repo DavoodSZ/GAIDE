@@ -3,7 +3,7 @@
 Evaluation entry point.
 
 Usage:
-    python scripts/eval.py --config-path ../gaide/config/eval/bin --config-name run \
+    python scripts/eval.py --config-path ../gaide/config/eval/bins --config-name run \
         model_path=/path/to/checkpoint.pt \
         normalization_info_path=/path/to/norm.pth \
         problem_dir=/path/to/problems \

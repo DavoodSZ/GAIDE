@@ -23,6 +23,7 @@ class PositionalEncoding(nn.Module):
         )
 
         pe = torch.zeros((x.shape[0], x.shape[1], self.embed_dim), device=x.device)
-        pe[:, :, 0::2] = torch.sin(position.unsqueeze(-1) * div_term)
-        pe[:, :, 1::2] = torch.cos(position.unsqueeze(-1) * div_term)
+        angles = position.unsqueeze(-1) * div_term
+        pe[:, :, 0::2] = torch.sin(angles)
+        pe[:, :, 1::2] = torch.cos(angles[:, :, : pe[:, :, 1::2].shape[-1]])
         return pe

@@ -6,7 +6,7 @@ from pointnet2_ops.pointnet2_modules import PointnetSAModule
 
 
 class RobotPCD(nn.Module):
-    def __init__(self):
+    def __init__(self, hidden_dim: int = 128):
         super().__init__()
         self.SA_modules = nn.ModuleList()
         self.SA_modules.append(
@@ -14,7 +14,7 @@ class RobotPCD(nn.Module):
                 npoint=16,
                 radius=0.1,
                 nsample=64,
-                mlp=[0, 64, 64, 64, 128],
+                mlp=[0, 64, 64, 64, hidden_dim],
                 use_xyz=True,
                 bn=False,
             )
@@ -29,7 +29,7 @@ class RobotPCD(nn.Module):
 
 
 class ScenePCD(nn.Module):
-    def __init__(self):
+    def __init__(self, hidden_dim: int = 128):
         super().__init__()
         self.SA_modules = nn.ModuleList()
         self.SA_modules.append(
@@ -37,7 +37,7 @@ class ScenePCD(nn.Module):
                 npoint=128,
                 radius=0.1,
                 nsample=64,
-                mlp=[0, 64, 64, 64, 128],
+                mlp=[0, 64, 64, 64, hidden_dim],
                 use_xyz=True,
                 bn=False,
             )
