@@ -3,6 +3,7 @@
 **Graph-based Attention Masking for Spatial- and Embodiment-aware Motion Planning**
 
 [![Paper](https://img.shields.io/badge/paper-arXiv%3A2603.04463-b31b1b.svg)](https://arxiv.org/abs/2603.04463)
+[![Website](https://img.shields.io/badge/website-GAIDE-blue.svg)](https://davoodsz.github.io/gaide.github.io/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 This is the official implementation of *GAIDE: Graph-based Attention Masking for Spatial- and Embodiment-aware Motion Planning*, accepted at IROS 2026.
